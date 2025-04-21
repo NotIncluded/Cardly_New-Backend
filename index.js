@@ -1,11 +1,39 @@
-const express = require('express');
-require('dotenv').config();
+const express = require("express");
+const dotenv = require("dotenv");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
+
+dotenv.config();
+
 const app = express();
 
+// Middleware
 app.use(express.json());
-const recordRoutes = require('./routes/record'); // or './record.js' if in root
-app.use('/records', recordRoutes);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+// Test routes
+app.get('/', (req,res) => {
+  res.send("Go to /api-docs for API documentation");
+});
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
+
+// // Routes
+// const recordRoutes = require("./routes/record");
+// app.use("/records", recordRoutes);
+
+// Import the routes from the 'routes/record.js' file
+const recordRoutes = require("./routes/record/record_routers");
+
+// Use the imported routes for the '/records' path
+app.use('/api/record', recordRoutes)
+
+// User routes
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port http://localhost:${PORT}`);
+  console.log(`Swagger running on port http://localhost:${PORT}/api-docs`);
 });
