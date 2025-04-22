@@ -10,7 +10,7 @@ const recordPut = require('./record_put/record_put')
  * @swagger
  * tags:
  *   name: Record
- *   description: Super Idol De Shou Rong Dou Mei Ni De Tian
+ *   description: Record Management Section
  */
 
 // Use the imported routers for their respective routes
