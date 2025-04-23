@@ -26,11 +26,12 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Import the routes from the 'routes/record.js' file
 const recordRoutes = require("./routes/record/record_routers");
 const ratingRoutes = require("./routes/rating/rating_routers");
+const coverRoutes = require('./routes/cover/cover_routers')
 
 // Use the imported routes for the '/records' path
 app.use('/api/record', recordRoutes);
 app.use('/api/rating', ratingRoutes);
-
+app.use('/api/cover', coverRoutes)
 // User routes
 
 // Start server
