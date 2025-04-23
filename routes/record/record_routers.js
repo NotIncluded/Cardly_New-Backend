@@ -5,6 +5,7 @@ const router = express.Router()
 const recordGet = require('./record_get/record_get')
 const recordPost = require('./record_post/record_post')
 const recordPut = require('./record_put/record_put')
+const recordDelete = require('./record_delete/record_delete')
 
 /**
  * @swagger
@@ -17,5 +18,5 @@ const recordPut = require('./record_put/record_put')
 router.use('/', recordGet) // This will handle the GET request
 router.use('/', recordPost) // This will handle the POST request
 router.use('/', recordPut) // This will handle the PUT request
-
+router.use('/', recordDelete) // This will handle the DELETE request
 module.exports = router
