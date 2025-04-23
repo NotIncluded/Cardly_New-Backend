@@ -6,7 +6,7 @@ const { supabaseAdmin } = require('../../../supabaseAdmin')
 require('./swagger_rating_fullcover_get')
 
 // Get full info and average rating for a record
-router.get('/:record_id', async (req, res) => {
+router.get('/full/:record_id', async (req, res) => {
     const { record_id } = req.params
 
     try {
