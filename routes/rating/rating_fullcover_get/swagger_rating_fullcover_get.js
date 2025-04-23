@@ -2,7 +2,7 @@
  * @swagger
  * /api/rating/{record_id}:
  *   get:
- *     summary: Get the average rating of a record
+ *     summary: Get full information of a record and its average rating
  *     tags: [Rating]
  *     parameters:
  *       - in: path
@@ -10,24 +10,55 @@
  *         schema:
  *           type: string
  *         required: true
- *         description: The ID of the record to retrieve the overall rating for
+ *         description: ID of the record to fetch rating and metadata for
  *     responses:
  *       200:
- *         description: Successfully retrieved average rating
+ *         description: Record details with average rating
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 average:
+ *                 record_id:
+ *                   type: string
+ *                   example: "rec123"
+ *                 user_id:
+ *                   type: string
+ *                   example: "user456"
+ *                 title:
+ *                   type: string
+ *                   example: "Introduction to Databases"
+ *                 description:
+ *                   type: string
+ *                   example: "A record about DB fundamentals."
+ *                 name:
+ *                   type: string
+ *                   example: "Jane Doe"
+ *                 category:
+ *                   type: string
+ *                   example: "Education"
+ *                 rating_avg:
  *                   type: number
  *                   format: float
  *                   example: 4.25
- *                 count:
- *                   type: integer
- *                   example: 12
- *       400:
- *         description: Missing or invalid record_id
+ *       404:
+ *         description: Record not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Record with ID rec123 not found
  *       500:
- *         description: Internal server error
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Internal server error
  */
