@@ -3,8 +3,10 @@ const router = express.Router()
 
 const coverhomepage = require('./cover_get/cover_homepage')
 const coverflashcard = require('./cover_get/cover_myflashcard')
+const ratingFullcoverGet = require('./full/rating_fullcover_get')
 
 router.use('/', coverhomepage)
 router.use('/', coverflashcard)
+router.use('/', ratingFullcoverGet)
 
 module.exports = router
