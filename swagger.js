@@ -12,6 +12,9 @@ const swaggerOptions = {
             {
                 url: 'http://localhost:3000', // Optional: you can use env vars too
             },
+            {
+                url: 'https://cardly-new-backend.onrender.com/', // Optional: you can use env vars too
+            }
         ],
     },
     apis: ['./routes/**/*.js'], // Path to the API docs
