@@ -10,7 +10,8 @@ router.get('/homepage', async (req, res) => {
             .from('Record')
             .select('Record_ID, Title, Description, Category, User_ID')
             .eq('Status', 'Public')
-            .order('Record_ID', { ascending: false })
+            .order('created', { ascending: false })
+            .limit(4)
 
         if (recordError) {
             throw new Error(`Error fetching records: ${recordError.message}`)
