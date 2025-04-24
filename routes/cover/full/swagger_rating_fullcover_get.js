@@ -1,6 +1,6 @@
 /**
  * @swagger
- * /api/rating/{record_id}:
+ * /api/cover/full/{record_id}:
  *   get:
  *     summary: Get full information of a record and its average rating
  *     tags: [Rating]
