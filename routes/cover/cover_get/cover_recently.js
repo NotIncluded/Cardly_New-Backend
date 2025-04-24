@@ -3,14 +3,15 @@ const router = express.Router()
 const { supabase } = require('../../../supabaseClient')
 const { supabaseAdmin } = require('../../../supabaseAdmin')
 
-router.get('/homepage', async (req, res) => {
+router.get('/recently', async (req, res) => {
     try {
         // Step 1: Fetch public records
         const { data: records, error: recordError } = await supabase
-        .from('Record')
-        .select('Record_ID, Title, Description, Category, User_ID')
-        .eq('Status', 'Public')
-        .order('Record_ID', { ascending: false })
+            .from('Record')
+            .select('Record_ID, Title, Description, Category, User_ID')
+            .eq('Status', 'Public')
+            .order('created', { ascending: false })
+            .limit(4)
 
         if (recordError) {
             throw new Error(`Error fetching records: ${recordError.message}`)
@@ -44,10 +45,10 @@ router.get('/homepage', async (req, res) => {
             category: record.Category,
         }))
 
-        console.log('🏠 Homepage records:', response)
+        console.log('🏠 Recently records:', response)
         res.status(200).json(response)
     } catch (error) {
-        console.error('❌ Homepage fetch error:', error.message)
+        console.error('❌ Recently fetch error:', error.message)
         res.status(500).json({ error: error.message })
     }
 })
