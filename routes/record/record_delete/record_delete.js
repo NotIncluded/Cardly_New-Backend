@@ -16,7 +16,9 @@ router.delete('/:record_id', async (req, res) => {
         const { error: deleteFlashcardsError } = await supabase
             .from('Flashcard')
             .delete()
-            .eq('Record_ID', record_id);
+            .eq('Record_ID', record_id)
+            .select()
+            .single();
 
         if (deleteFlashcardsError) {
             throw new Error(`Error deleting associated flashcards: ${deleteFlashcardsError.message}`);
@@ -35,13 +37,13 @@ router.delete('/:record_id', async (req, res) => {
             throw new Error(`Error deleting record: ${deleteRecordError.message}`);
         }
 
-        if (data) {
-            console.log('🗑️ Record deleted:', data);
-            res.status(200).json({ message: `Record with ID ${record_id} and its associated flashcards have been successfully deleted.` });
-        } else {
-            res.status(404).json({ message: `Record with ID ${record_id} not found.` });
-        }
-
+        res.status(200).json({
+            message: 'Record deleted successfully.',
+        });
+        
+        res.status(404).json({
+            message: 'Cannot find the record.',
+        });
     } catch (error) {
         console.error('❌ Error deleting record:', error.message);
         res.status(500).json({ error: error.message });

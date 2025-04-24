@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { supabase } = require('../../../supabaseClient')
+const { supabaseAdmin } = require('../../../supabaseAdmin')
 
 router.get('/homepage', async (req, res) => {
     try {
@@ -18,18 +19,21 @@ router.get('/homepage', async (req, res) => {
         // Step 2: Get all unique User_IDs
         const userIds = [...new Set(records.map(r => r.User_ID))]
 
-        // Step 3: Fetch user names
-        const { data: users, error: userError } = await supabase
-            .from('User')
-            .select('user_id, name')
-            .in('user_id', userIds)
+        // Step 3: Fetch user info from auth.users via admin client
+        const userFetches = await Promise.all(
+            userIds.map(async (id) => {
+                const { data, error } = await supabaseAdmin.auth.admin.getUserById(id)
+                if (error) {
+                    console.error(`⚠️ Failed to fetch user ${id}: ${error.message}`)
+                    return { id, name: 'Unknown' }
+                }
+                const name = data?.user?.user_metadata?.display_name || 'Unknown'
+                return { id, name }
+            })
+        )
 
-        if (userError) {
-            throw new Error(`Error fetching users: ${userError.message}`)
-        }
-
-        // Step 4: Map users by ID for quick lookup
-        const userMap = Object.fromEntries(users.map(u => [u.user_id, u.name]))
+        // Step 4: Map user IDs to names
+        const userMap = Object.fromEntries(userFetches.map(u => [u.id, u.name]))
 
         // Step 5: Combine results
         const response = records.map(record => ({

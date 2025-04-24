@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { supabase } = require('../../../supabaseClient')
+const { supabaseAdmin } = require('../../../supabaseAdmin')
 
 router.get('/myflashcard/:user_id', async (req, res) => {
     const { user_id } = req.params
@@ -10,27 +11,40 @@ router.get('/myflashcard/:user_id', async (req, res) => {
     }
 
     try {
-        // Fetch all records by the user
-        const { data: records, error } = await supabase
+        // Step 1: Fetch user's display name from auth.users
+        const { data: user, error: userError } = await supabaseAdmin.auth.admin.getUserById(user_id)
+
+        if (userError) throw userError
+        if (!user || !user.user) {
+            return res.status(404).json({ error: `User with ID ${user_id} not found` })
+        }
+
+        const displayName = user.user.user_metadata?.display_name || 'Unknown'
+
+        // Step 2: Fetch all records by this user
+        const { data: records, error: recordError } = await supabase
             .from('Record')
             .select('Record_ID, Title, Description, Category, Status')
             .eq('User_ID', user_id)
             .order('Record_ID', { ascending: false })
 
-        if (error) {
-            throw new Error(`Error fetching user's records: ${error.message}`)
+        if (recordError) {
+            throw new Error(`Error fetching user's records: ${recordError.message}`)
         }
 
-        // Format response
-        const response = records.map(record => ({
-            record_id: record.Record_ID,
-            title: record.Title,
-            description: record.Description,
-            category: record.Category,
-            status: record.Status
-        }))
+        // Step 3: Format response with display name
+        const response = {
+            name: displayName,
+            records: records.map(record => ({
+                record_id: record.Record_ID,
+                title: record.Title,
+                description: record.Description,
+                category: record.Category,
+                status: record.Status
+            }))
+        }
 
-        console.log(`📄 Records for user ${user_id}:`, response)
+        console.log(`📄 Records for user ${user_id} (${displayName}):`, response)
         res.status(200).json(response)
     } catch (err) {
         console.error('❌ Error fetching my flashcards:', err.message)
