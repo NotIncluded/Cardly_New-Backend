@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
+const cors = require('cors')
 
 dotenv.config();
 
@@ -9,6 +10,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors())
 
 // Test routes
 app.get('/', (req,res) => {
