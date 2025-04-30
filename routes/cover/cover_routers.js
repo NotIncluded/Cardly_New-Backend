@@ -7,6 +7,13 @@ const coverbookmark = require('./cover_get/cover_mybookmarks')
 const ratingFullcoverGet = require('./full/rating_fullcover_get')
 const recently = require('./cover_get/cover_recently')
 
+/**
+ * @swagger
+ * tags:
+ *   name: Cover
+ *   description: Cover Management Section
+ */
+
 router.use('/', coverhomepage)
 router.use('/', coverflashcard)
 router.use('/', coverbookmark)
