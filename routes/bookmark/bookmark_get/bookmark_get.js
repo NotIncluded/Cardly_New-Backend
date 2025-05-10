@@ -23,7 +23,7 @@ router.get('/:user_id/:record_id', async (req, res) => {
         const exists = !!data
 
         if (!exists) {
-            return res.status(404).json({
+            return res.status(200).json({
                 exists: false,
                 message: 'Bookmark Not Found',
             })
