@@ -15,14 +15,15 @@ router.get('/:record_id/:user_id', async (req, res) => {
             .eq('Record_ID', record_id)
             .eq('User_ID', user_id)
             .single() // Expect only one record
+            
+            if (!data) {
+                return res.status(200).json({
+                    message: `No rating found for record ID ${record_id} by user ${user_id}`,
+                    rating: 0,
+                })
+            }
 
         if (error) throw error
-
-        if (!data) {
-            return res.status(404).json({
-                message: `No rating found for record ID ${record_id} by user ${user_id}`,
-            })
-        }
 
         res.status(200).json({
             record_id,
