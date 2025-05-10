@@ -34,11 +34,11 @@ router.get('/myflashcard/:user_id', async (req, res) => {
 
         // Step 3: Format response with display name
         const response = {
-            name: displayName,
             records: records.map(record => ({
                 record_id: record.Record_ID,
                 title: record.Title,
                 description: record.Description,
+                name: displayName,
                 category: record.Category,
                 status: record.Status
             }))
